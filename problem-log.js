@@ -21,3 +21,22 @@ Oh, right, instead of loading my HTML from chrome via localhost, serve it via a 
 Oh, right: two dicts are compared by object reference, not by contents. Same with arrays. So I can't really make a Set of RGB dicts/arrays.
 
 > Tons of memory errors
+
+
+Now with AssemblyScript:
+
+adityas-mbp-2:color-cycler aprasad$ npm update
+dyld: Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.67.dylib
+  Referenced from: /usr/local/bin/node
+  Reason: image not found
+Abort trap: 6
+
+https://stackoverflow.com/questions/53828891/dyld-library-not-loaded-usr-local-opt-icu4c-lib-libicui18n-62-dylib-error-run
+
+adityas-mbp-2:color-cycler aprasad$ brew update
+touch: /usr/local/Homebrew/.git/FETCH_HEAD: Permission denied
+
+$ sudo chown -R $(whoami) /usr/local/Homebrew/
+$ brew update
+(works now)
+

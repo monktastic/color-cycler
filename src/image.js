@@ -7,34 +7,29 @@ img.onload = function() {
                      0, 0, canvas.width, canvas.height); // destination rectangle
 
   imgData = ctx.getImageData(0, 0, img.width, img.height);
-  var hsvs = getColors(imgData.data);
+  var hsvs = getHSVs(imgData.data);
 
   cycle(0, ctx, imgData, hsvs);
 };
 
 function cycle(shift, ctx, imgData, hsvs) {
-  //imgData = ctx.getImageData(0, 0, img.width, img.height);
   var clone = imgData.data.slice();
   colorShift(shift, clone, hsvs);
 
   imgData.data.set(clone);
   ctx.putImageData(imgData, 0, 0);
 
-  shift += .035;
   setTimeout(function() {
-    cycle(shift, ctx, imgData, hsvs);
+    cycle(shift + .035, ctx, imgData, hsvs);
   }, 0);
 }
 
 function colorShift(shift, data, hsvs) {
+  console.log(hsvs.length);
   for (var i = 0; i < hsvs.length; i++) {
-    //[r, g, b] = [data[i], data[i+1], data[i+2]];
-    //var [h, s, v] = rgb2hsv(r, g, b);
     var [h, s, v] = hsvs[i];
 
-    //h = (h + shift) % 360;
-    h += shift;
-    h = h % 1;
+    h = (h + shift) % 1;
     [r, g, b] = hsv2rgb(h, s, v);    
 
     data[4*i+0] = r;
@@ -43,7 +38,7 @@ function colorShift(shift, data, hsvs) {
   }
 }
 
-function getColors(data) {
+function getHSVs(data) {
   var hsvs = new Array();
   for (var i = 0; i < data.length; i+= 4) {
     [r, g, b] = [data[i], data[i+1], data[i+2]];
@@ -105,18 +100,8 @@ function hsv2rgb(h, s, v) {
   return [ r * 255, g * 255, b * 255 ];
 }
 
-
-function componentToHex(c) {
-  var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(r, g, b) {
-  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-
-img.src = 'sky-diamonds.jpg';
+img.src = 'psychonaut.jpg';
+//img.src = 'sky-diamonds.jpg';
 //img.src = 'forest-glade-metta.jpg';
 //img.src = 'palette.jpg';
 //img.src = 'rgby_tiny.jpg';
