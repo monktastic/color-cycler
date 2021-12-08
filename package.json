@@ -1,0 +1,29 @@
+{
+  "name": "color-cycler",
+  "version": "1.0.0",
+  "description": "Color cycle images",
+  "main": "problem-log.js",
+  "scripts": {
+    "test": "node tests",
+    "asbuild:untouched": "asc assembly/index.ts -b build/untouched.wasm -t build/untouched.wat --use Math=JSMath --runtime stub --importMemory --sourceMap --debug --measure",
+    "asbuild:optimized": "asc assembly/index.ts -b build/optimized.wasm -t build/optimized.wat -d build/optimized.d.ts --use Math=JSMath -O3 --runtime stub --importMemory --sourceMap --measure",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "start": "npx serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monktastic/color-cycler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/monktastic/color-cycler/issues"
+  },
+  "homepage": "https://github.com/monktastic/color-cycler#readme",
+  "dependencies": {
+    "@assemblyscript/loader": "^0.19.20"
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.19.20"
+  }
+}

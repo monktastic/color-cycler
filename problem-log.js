@@ -40,3 +40,9 @@ $ sudo chown -R $(whoami) /usr/local/Homebrew/
 $ brew update
 (works now)
 
+$ brew install node@16
+
+$ node
+zsh: command not found: node
+
+$ brew link node@16
