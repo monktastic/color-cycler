@@ -1,12 +1,62 @@
 
+const dropArea = document.getElementById('drop-area');
+
+dropArea.addEventListener('dragover', (event) => {
+  event.stopPropagation();
+  event.preventDefault();
+  // Style the drag-and-drop as a "copy file" operation.
+  event.dataTransfer.dropEffect = 'copy';
+});
+
+dropArea.addEventListener('drop', (event) => {
+  event.stopPropagation();
+  event.preventDefault();
+  const fileList = event.dataTransfer.files;
+  // fileInput.files = fileList; // Shows the file list
+  console.log(fileList);
+
+  const file = fileList[0];
+  // Check if the file is an image.
+  if (file.type && !file.type.startsWith('image/')) {
+    console.log('File is not an image.', file.type, file);
+  } else {
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+      img.src = event.target.result;
+    });
+    reader.readAsDataURL(file);
+  }
+});
+
 // Set up the canvas with a 2D rendering context
-var cnv = document.getElementById("canvas");
-var ctx = cnv.getContext("2d");
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 
 var memory;
 var img = new Image();
 
+// window.onresize = function()
+// {
+//   resizeCanvas();
+// }
+
+function resizeCanvas() 
+{
+  if (img.height / img.width > window.innerHeight / window.innerWidth) {
+    canvas.height = window.innerHeight;
+    canvas.width = img.width / img.height * window.innerHeight;
+  } else {
+    canvas.width = window.innerWidth;
+    canvas.height = img.height / img.width * window.innerWidth;    
+  }
+}
+
 img.onload = function() {
+  // Remove the file selector.
+  var elem = document.getElementById("drop-area");
+  elem.parentNode.removeChild(elem);
+  resizeCanvas();
+
   // Compute the size of and instantiate the module's memory
   // 4 bytes for RGBA, 12 bytes for HSV
   var byteSize = img.width * img.height * 16;
@@ -14,8 +64,7 @@ img.onload = function() {
   memory = new WebAssembly.Memory({ initial: pages });
   console.log("Allocated pages:", pages);
   console.log("Width and height", img.width, img.height);
-  canvas.width = img.width;
-  canvas.height = img.height;
+
   ctx.drawImage(img, 0, 0, img.width,    img.height,     // source rectangle
                      0, 0, canvas.width, canvas.height); // destination rectangle
 
@@ -46,7 +95,7 @@ img.onload = function() {
     var imageData = ctx.createImageData(img.width, img.height);
     var argb = new Uint8Array(imageData.data.buffer);
 
-    (function update() {
+    (function update() {      
       setTimeout(update, 0);
       exports.cycle(shift);
       shift = (shift + 0.035) % 1;
@@ -110,6 +159,6 @@ function rgb2hsv(r, g, b) {
 // img.src = 'psychonaut.jpg';
 // img.src = 'sky-diamonds.jpg';
 // img.src = 'forest-glade-metta.jpg';
-img.src = 'ayahuasca.jpg';
+// img.src = 'ayahuasca.jpg';
 // img.src = 'palette.jpg';
 // img.src = 'rgby_tiny.jpg';
